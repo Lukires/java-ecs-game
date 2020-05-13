@@ -8,6 +8,7 @@ import ddu.game.components.VelocityComponent;
 import ddu.game.components.family.Families;
 import ddu.game.entities.Soldier;
 import ddu.game.systems.MovementSystem;
+import ddu.game.window.Window;
 
 public class GameHandler extends PooledEngine {
 
@@ -21,6 +22,7 @@ public class GameHandler extends PooledEngine {
 
     //Families (Collections of components)
     private final static Family physicsFamily = Families.PHYSICS.getFamily();
+    private Window window;
 
 
     private boolean visualize;
@@ -37,6 +39,12 @@ public class GameHandler extends PooledEngine {
         //We use this.createEntity() as to avoid initializing new things.
         //for the sake of pooling
         this.addEntity(Soldier.convertEntity(this.createEntity(), this));
+
+        if(this.visualize) {
+            window = new Window();
+            window.run();
+        }
+
 
     }
 
