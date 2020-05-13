@@ -1,0 +1,6 @@
+package ddu.game.components;
+
+import com.badlogic.ashley.core.Component;
+
+public class CollisionComponent implements Component {
+}
