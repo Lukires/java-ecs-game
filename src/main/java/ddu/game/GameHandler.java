@@ -9,7 +9,7 @@ import ddu.game.components.family.Families;
 import ddu.game.entities.Soldier;
 import ddu.game.systems.MovementSystem;
 
-public class GameHandler extends Engine {
+public class GameHandler extends PooledEngine {
 
 
     //ComponentMapper is O(1)
@@ -34,17 +34,15 @@ public class GameHandler extends Engine {
 
         this.addSystem(movementSystem);
 
-        this.addEntity(new Soldier());
+        //We use this.createEntity() as to avoid initializing new things.
+        //for the sake of pooling
+        this.addEntity(Soldier.convertEntity(this.createEntity(), this));
 
     }
 
     private void loop() {
 
-        //Iterate all entities that are affected by physics
-        for (Entity entity : this.getEntitiesFor(physicsFamily)) {
-
-        }
-
+        update(1);
 
 
     }
