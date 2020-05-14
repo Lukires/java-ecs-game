@@ -14,13 +14,17 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Window {
 
-    private long window;
+    public long window;
 
     public void run() {
-        System.out.println("LWJGL " + Version.getVersion() + "!");
+        System.out.println("LWJGL " + Version.getVersion());
         init();
-        loop();
 
+        GL.createCapabilities();
+        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+    }
+
+    public void terminate() {
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
 
@@ -46,11 +50,15 @@ public class Window {
         if (window == 0) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
-
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+            keyCall(window, key, scancode, action, mods);
         });
+
+        //Resize
+        glfwSetFramebufferSizeCallback(window, (window, width, height) -> {
+            glViewport(0,0,width,height);
+        });
+
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1);
@@ -60,26 +68,30 @@ public class Window {
 
             GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
+            //Place our window in the middle of the screen
             glfwSetWindowPos(window, (vidmode.width() - pWidth.get(0) / 2), (vidmode.height() - pHeight.get(0) / 2));
         }
 
         glfwMakeContextCurrent(window);
+
+        //V-Sync to avoid screen tearing
+        //Sync with refresh rate of video card
         glfwSwapInterval(1);
+
+
         glfwShowWindow(window);
-
     }
 
-    private void loop() {
-        GL.createCapabilities();
-
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-
-        while(!glfwWindowShouldClose(window)) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glfwSwapBuffers(window);
-            glfwPollEvents();
+    private void keyCall(long window, int key, int scancode, int action, int mods) {
+        if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
+            glfwSetWindowShouldClose(window, true);
+            terminate();
         }
-
     }
+
+    public long getWindow() {
+        return this.window;
+    }
+
 
 }
