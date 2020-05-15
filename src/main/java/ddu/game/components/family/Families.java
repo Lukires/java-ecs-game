@@ -1,7 +1,7 @@
 package ddu.game.components.family;
 
 import com.badlogic.ashley.core.Family;
-import ddu.game.components.CollisionComponent;
+import ddu.game.components.collision.CollisionComponent;
 import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.VelocityComponent;

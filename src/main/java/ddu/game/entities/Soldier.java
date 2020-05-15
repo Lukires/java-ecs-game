@@ -2,7 +2,7 @@ package ddu.game.entities;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import ddu.game.components.CollisionComponent;
+import ddu.game.components.collision.CollisionComponent;
 import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.VelocityComponent;
