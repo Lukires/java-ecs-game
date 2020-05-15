@@ -1,4 +1,4 @@
-package ddu.game.systems;
+package ddu.game.window;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
@@ -22,7 +22,7 @@ is that the window is just a window. The window displays
 the renderer
 
  */
-public class RenderSystem extends EntitySystem {
+public class RenderSystem {
 
     private ImmutableArray<Entity> entities;
 
@@ -31,20 +31,16 @@ public class RenderSystem extends EntitySystem {
     private Window windowHandler;
     private GameHandler gameHandler;
 
-    public RenderSystem(int priority, GameHandler gameHandler) {
-        super(priority);
-        this.gameHandler=gameHandler;
-        this.windowHandler=gameHandler.getWindow();
+    public RenderSystem(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
+        this.windowHandler = gameHandler.getWindow();
     }
 
-    public void addedToEngine(Engine engine) {
-        this.entities = engine.getEntitiesFor(Families.DRAW.getFamily());
-    }
+    public void render(float dt) {
+        this.entities = gameHandler.getEntitiesFor(Families.DRAW.getFamily());
 
-    public void update(float dt) {
-
+        // TODO: move somewhere else
         if(glfwWindowShouldClose(windowHandler.window)) {
-            gameHandler.removeSystem(this);
             return;
         }
 
@@ -62,5 +58,4 @@ public class RenderSystem extends EntitySystem {
             drawComponent = drawMapper.get(entity);
         }
     }
-
 }

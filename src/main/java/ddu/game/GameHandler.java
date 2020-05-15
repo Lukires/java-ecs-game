@@ -8,10 +8,8 @@ import ddu.game.components.VelocityComponent;
 import ddu.game.components.family.Families;
 import ddu.game.entities.Soldier;
 import ddu.game.systems.MovementSystem;
-import ddu.game.systems.RenderSystem;
+import ddu.game.window.RenderSystem;
 import ddu.game.window.Window;
-
-import java.time.Instant;
 
 public class GameHandler extends PooledEngine implements Runnable {
 
@@ -25,12 +23,19 @@ public class GameHandler extends PooledEngine implements Runnable {
 
     //Families (Collections of components)
     private final static Family physicsFamily = Families.PHYSICS.getFamily();
+
+    // JLWGL rendering and windowing
     private Window window;
+    private RenderSystem renderSystem;
 
     private Thread loopThread;
     private boolean gameRunning = true;
 
+    // Fixed time step variable
     public static final long frameRate = 60;
+    public static final float interval = 1f / frameRate;
+    public float accumulator = 0f;
+    public long lastTime;
 
     private boolean visualize;
     public GameHandler(boolean visualize) {
@@ -57,7 +62,6 @@ public class GameHandler extends PooledEngine implements Runnable {
     private void loop() {
         loopThread = new Thread(this, "GAME_LOOP");
         loopThread.start();
-
     }
 
 
@@ -68,18 +72,26 @@ public class GameHandler extends PooledEngine implements Runnable {
             window = new Window();
             window.run();
 
-            RenderSystem renderSystem = new RenderSystem(0,this);
-            this.addSystem(renderSystem);
+            renderSystem = new RenderSystem(this);
+            lastTime = System.nanoTime();
         }
 
         while(gameRunning) {
-            update(1f);
-            try {
-                loopThread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            // Accumulate time since last frame
+            long now = System.nanoTime();
+            accumulator += (now - lastTime)/1_000_000_000f;
+            lastTime = now;
+
+            // Advance simulation
+            while (accumulator >= interval) {
+                update(interval);
+                accumulator -= interval;
             }
 
+            // Render
+            renderSystem.render(interval);
+
+            // TODO Check if we need to quit
         }
     }
 }

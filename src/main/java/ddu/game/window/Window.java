@@ -10,7 +10,8 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
+//import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
 
 public class Window {
 
@@ -45,11 +46,12 @@ public class Window {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-        window = glfwCreateWindow(1000, 1000, "Game", 0, 0);
+        window = glfwCreateWindow(800, 600, "Game", 0, 0);
 
         if (window == 0) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
+
         glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
             keyCall(window, key, scancode, action, mods);
         });
