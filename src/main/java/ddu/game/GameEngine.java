@@ -9,9 +9,12 @@ import ddu.game.components.family.Families;
 import ddu.game.entities.Soldier;
 import ddu.game.systems.MovementSystem;
 import ddu.game.window.RenderSystem;
-import ddu.game.window.Window;
+import org.newdawn.slick.Game;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
-public class GameHandler extends PooledEngine implements Runnable {
+public class GameEngine extends PooledEngine implements Runnable, Game {
 
 
     //ComponentMapper is O(1)
@@ -25,10 +28,8 @@ public class GameHandler extends PooledEngine implements Runnable {
     private final static Family physicsFamily = Families.PHYSICS.getFamily();
 
     // JLWGL rendering and windowing
-    private Window window;
     private RenderSystem renderSystem;
 
-    private Thread loopThread;
     private boolean gameRunning = true;
 
     // Fixed time step variable
@@ -38,12 +39,12 @@ public class GameHandler extends PooledEngine implements Runnable {
     public long lastTime;
 
     private boolean visualize;
-    public GameHandler(boolean visualize) {
+    public GameEngine(boolean visualize) {
         this.visualize=visualize;
     }
 
-    public void init() {
-
+    @Override
+    public void init(GameContainer gameContainer) throws SlickException {
         MovementSystem movementSystem = new MovementSystem(10);
 
         this.addSystem(movementSystem);
@@ -51,47 +52,34 @@ public class GameHandler extends PooledEngine implements Runnable {
         //We use this.createEntity() as to avoid initializing new things.
         //for the sake of pooling
         this.addEntity(Soldier.convertEntity(this.createEntity(), this));
-
-        loop();
+        renderSystem = new RenderSystem(this);
     }
 
-    public Window getWindow() {
-        return window;
+    @Override
+    public void update(GameContainer gameContainer, int i) throws SlickException {
+        update((float)i/1000f);
     }
 
-    private void loop() {
-        loopThread = new Thread(this, "GAME_LOOP");
-        loopThread.start();
+    @Override
+    public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
+        if(visualize) {
+            renderSystem.render();
+        }
     }
 
+    @Override
+    public boolean closeRequested() {
+        return false;
+    }
+
+    @Override
+    public String getTitle() {
+        return null;
+    }
 
     @Override
     public void run() {
+        System.out.print(1);
 
-        if(this.visualize) {
-            window = new Window();
-            window.run();
-
-            renderSystem = new RenderSystem(this);
-            lastTime = System.nanoTime();
-        }
-
-        while(gameRunning) {
-            // Accumulate time since last frame
-            long now = System.nanoTime();
-            accumulator += (now - lastTime)/1_000_000_000f;
-            lastTime = now;
-
-            // Advance simulation
-            while (accumulator >= interval) {
-                update(interval);
-                accumulator -= interval;
-            }
-
-            // Render
-            renderSystem.render(interval);
-
-            // TODO Check if we need to quit
-        }
     }
 }

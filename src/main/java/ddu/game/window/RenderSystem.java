@@ -1,19 +1,12 @@
 package ddu.game.window;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import ddu.game.GameHandler;
+import ddu.game.GameEngine;
 import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
-import ddu.game.components.VelocityComponent;
 import ddu.game.components.family.Families;
-import ddu.game.window.Window;
-
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
 
 /*
 
@@ -28,26 +21,14 @@ public class RenderSystem {
 
     private ComponentMapper<PositionComponent> positionMapper  = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<DrawComponent> drawMapper = ComponentMapper.getFor(DrawComponent.class);
-    private Window windowHandler;
-    private GameHandler gameHandler;
+    private GameEngine engine;
 
-    public RenderSystem(GameHandler gameHandler) {
-        this.gameHandler = gameHandler;
-        this.windowHandler = gameHandler.getWindow();
+    public RenderSystem(GameEngine engine) {
+        this.engine=engine;
     }
 
-    public void render(float dt) {
-        this.entities = gameHandler.getEntitiesFor(Families.DRAW.getFamily());
-
-        // TODO: move somewhere else
-        if(glfwWindowShouldClose(windowHandler.window)) {
-            return;
-        }
-
-        //clear the buffer buffer
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glfwSwapBuffers(windowHandler.window); //swap color buffers
-        glfwPollEvents(); //poll events
+    public void render() {
+        this.entities = engine.getEntitiesFor(Families.DRAW.getFamily());
 
         PositionComponent positionComponent;
         DrawComponent drawComponent;
@@ -57,5 +38,6 @@ public class RenderSystem {
             positionComponent = positionMapper.get(entity);
             drawComponent = drawMapper.get(entity);
         }
+
     }
 }
