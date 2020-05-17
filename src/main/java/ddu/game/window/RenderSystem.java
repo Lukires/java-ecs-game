@@ -7,6 +7,9 @@ import ddu.game.GameEngine;
 import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.family.Families;
+import ddu.game.texture.Textures;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 
 /*
 
@@ -27,7 +30,7 @@ public class RenderSystem {
         this.engine=engine;
     }
 
-    public void render() {
+    public void render(GameContainer gameContainer, Graphics graphics) {
         this.entities = engine.getEntitiesFor(Families.DRAW.getFamily());
 
         PositionComponent positionComponent;
@@ -38,6 +41,10 @@ public class RenderSystem {
             positionComponent = positionMapper.get(entity);
             drawComponent = drawMapper.get(entity);
         }
+
+        graphics.drawImage(Textures.STONE_TILE.getImage(), 100, 100);
+
+
 
     }
 }

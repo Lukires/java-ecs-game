@@ -9,10 +9,7 @@ import ddu.game.components.family.Families;
 import ddu.game.entities.Soldier;
 import ddu.game.systems.MovementSystem;
 import ddu.game.window.RenderSystem;
-import org.newdawn.slick.Game;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 
 public class GameEngine extends PooledEngine implements Runnable, Game {
 
@@ -63,12 +60,13 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         if(visualize) {
-            renderSystem.render();
+            renderSystem.render(gameContainer, graphics);
         }
     }
 
     @Override
     public boolean closeRequested() {
+        System.exit(0);
         return false;
     }
 
