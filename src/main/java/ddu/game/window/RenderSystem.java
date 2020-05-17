@@ -40,9 +40,11 @@ public class RenderSystem {
         for(Entity entity : entities) {
             positionComponent = positionMapper.get(entity);
             drawComponent = drawMapper.get(entity);
+
+            graphics.drawImage(drawComponent.texture.getImage(), (int)positionComponent.position.x, (int)positionComponent.position.y);
         }
 
-        graphics.drawImage(Textures.STONE_TILE.getImage(), 100, 100);
+        //graphics.drawImage(Textures.STONE_TILE.getImage(), 100, 100);
 
 
 

@@ -9,6 +9,7 @@ import ddu.game.components.family.Families;
 import ddu.game.entities.Soldier;
 import ddu.game.systems.MovementSystem;
 import ddu.game.window.RenderSystem;
+import ddu.game.world.World;
 import org.newdawn.slick.*;
 
 public class GameEngine extends PooledEngine implements Runnable, Game {
@@ -30,10 +31,13 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     private boolean gameRunning = true;
 
     // Fixed time step variable
-    public static final long frameRate = 60;
+    public static final int frameRate = 60;
     public static final float interval = 1f / frameRate;
     public float accumulator = 0f;
     public long lastTime;
+
+    //Game world
+    World world;
 
     private boolean visualize;
     public GameEngine(boolean visualize) {
@@ -42,13 +46,24 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
+        gameContainer.setTargetFrameRate(frameRate);
         MovementSystem movementSystem = new MovementSystem(10);
 
         this.addSystem(movementSystem);
 
         //We use this.createEntity() as to avoid initializing new things.
         //for the sake of pooling
-        this.addEntity(Soldier.convertEntity(this.createEntity(), this));
+        //this.addEntity(Soldier.convertEntity(this.createEntity(), this));
+
+
+        /*
+        We just add the entire world to the engine as entities
+        This way of splitting up code is kinda anti pattern and bad but it's fine for now
+         */
+        world = new World();
+        world.generateWorld(0);
+        world.addWorldToEngine(this);
+
         renderSystem = new RenderSystem(this);
     }
 
