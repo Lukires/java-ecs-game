@@ -36,9 +36,9 @@ public class RoomIdentity {
         JSONArray array = (JSONArray) json.get("tiles");
         tiles = new Tile[width][height];
 
-        for(int x = 0; x < array.size(); x++) {
+        for(int x = 0; x < width; x++) {
             JSONArray xaxis = (JSONArray) array.get(x);
-            for(int y = 0; y < xaxis.size(); y++) {
+            for(int y = 0; y < height; y++) {
                 String tile = (String) xaxis.get(y);
                 tiles[x][y] = Tile.valueOf(tile);
             }

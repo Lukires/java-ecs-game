@@ -7,10 +7,17 @@ import ddu.game.components.PositionComponent;
 import ddu.game.components.VelocityComponent;
 import ddu.game.components.family.Families;
 import ddu.game.entities.Soldier;
+import ddu.game.input.InputListener;
+import ddu.game.input.Keys;
 import ddu.game.systems.MovementSystem;
+import ddu.game.window.Camera;
 import ddu.game.window.RenderSystem;
 import ddu.game.world.World;
 import org.newdawn.slick.*;
+import org.newdawn.slick.command.InputProvider;
+import org.newdawn.slick.command.InputProviderListener;
+
+import java.util.ArrayList;
 
 public class GameEngine extends PooledEngine implements Runnable, Game {
 
@@ -30,6 +37,8 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
 
     private boolean gameRunning = true;
 
+    public ArrayList<Keys> keys = new ArrayList<Keys>();
+
     // Fixed time step variable
     public static final int frameRate = 60;
     public static final float interval = 1f / frameRate;
@@ -37,7 +46,10 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     public long lastTime;
 
     //Game world
-    World world;
+    public World world;
+
+    //Camera
+    public Camera camera;
 
     private boolean visualize;
     public GameEngine(boolean visualize) {
@@ -60,6 +72,12 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         We just add the entire world to the engine as entities
         This way of splitting up code is kinda anti pattern and bad but it's fine for now
          */
+
+        this.camera=new Camera();
+        InputListener inputListener = new InputListener(this);
+        gameContainer.getInput().addKeyListener(inputListener);
+        gameContainer.getInput().addMouseListener(inputListener);
+
         world = new World();
         world.generateWorld(0);
         world.addWorldToEngine(this);
@@ -95,4 +113,7 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         System.out.print(1);
 
     }
+
+
+
 }

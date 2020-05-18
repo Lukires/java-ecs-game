@@ -25,13 +25,20 @@ public class RenderSystem {
     private ComponentMapper<PositionComponent> positionMapper  = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<DrawComponent> drawMapper = ComponentMapper.getFor(DrawComponent.class);
     private GameEngine engine;
+    Camera camera;
 
     public RenderSystem(GameEngine engine) {
         this.engine=engine;
+        this.camera=engine.camera;
     }
 
     public void render(GameContainer gameContainer, Graphics graphics) {
         this.entities = engine.getEntitiesFor(Families.DRAW.getFamily());
+
+        graphics.translate(camera.getX(), camera.getY());
+        graphics.scale(camera.getScale(), camera.getScale());
+
+        graphics.setWorldClip(camera.getX(), camera.getY(), gameContainer.getWidth(), gameContainer.getHeight());
 
         PositionComponent positionComponent;
         DrawComponent drawComponent;
@@ -40,6 +47,8 @@ public class RenderSystem {
         for(Entity entity : entities) {
             positionComponent = positionMapper.get(entity);
             drawComponent = drawMapper.get(entity);
+
+            //drawComponent.texture.getImage().draw((int)positionComponent.position.x, (int)positionComponent.position.y, camera.getScale());
 
             graphics.drawImage(drawComponent.texture.getImage(), (int)positionComponent.position.x, (int)positionComponent.position.y);
         }

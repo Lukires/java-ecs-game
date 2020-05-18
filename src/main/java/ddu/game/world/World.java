@@ -28,10 +28,10 @@ public class World {
             int roomy = room.getY();
 
             Tile[][] tiles = room.getTiles();
-            for(int x = 0; x < tiles.length; x++) {
+            for(int x = 0; x < room.getWidth(); x++) {
                 Tile[] tileAxis = tiles[x];
 
-                for(int y = 0; y < tileAxis.length; y++) {
+                for(int y = 0; y < room.getHeight(); y++) {
                     Tile tile = tileAxis[y];
                     Entity entity = Tile.convertEntity(engine.createEntity(), tile, engine);
                     PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
