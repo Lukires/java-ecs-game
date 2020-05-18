@@ -5,10 +5,10 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
 
-public class InputListener implements KeyListener, MouseListener {
+public class InputSystem implements KeyListener, MouseListener {
 
     GameEngine engine;
-    public InputListener(GameEngine engine) {
+    public InputSystem(GameEngine engine) {
         this.engine=engine;
     }
 

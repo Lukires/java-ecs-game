@@ -7,6 +7,8 @@ import ddu.game.components.PositionComponent;
 import ddu.game.components.collision.CollisionComponent;
 import ddu.game.texture.Texture;
 import ddu.game.texture.Textures;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 public enum Tile {
     STONE(Textures.STONE_TILE.getTexture(), 16, 16, false, 1.0);
@@ -16,6 +18,7 @@ public enum Tile {
     int height;
     boolean collidable;
     double speed;
+    Shape hitbox;
 
     public Texture getTexture() {
         return texture;
@@ -29,7 +32,6 @@ public enum Tile {
         return height;
     }
 
-
     public boolean isCollidable() {
         return collidable;
     }
@@ -38,12 +40,17 @@ public enum Tile {
         return speed;
     }
 
+    public Shape getHitbox() {
+        return hitbox;
+    }
+
     Tile(Texture texture, int width, int height, boolean collidable, double speed) {
         this.texture=texture;
         this.width=width;
         this.height=height;
         this.collidable=collidable;
         this.speed=speed;
+        this.hitbox = new Rectangle(0, 0, width, height);
     }
 
     public static Entity convertEntity(Entity entity, Tile type, PooledEngine engine) {

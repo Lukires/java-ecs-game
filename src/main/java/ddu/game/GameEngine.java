@@ -1,21 +1,21 @@
 package ddu.game;
 
 import com.badlogic.ashley.core.*;
+import ddu.game.components.AnimationComponent;
 import ddu.game.components.collision.CollisionComponent;
 import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.VelocityComponent;
 import ddu.game.components.family.Families;
-import ddu.game.entities.Soldier;
-import ddu.game.input.InputListener;
+import ddu.game.input.InputSystem;
 import ddu.game.input.Keys;
 import ddu.game.systems.MovementSystem;
+import ddu.game.unit.Unit;
+import ddu.game.unit.UnitBuilder;
 import ddu.game.window.Camera;
 import ddu.game.window.RenderSystem;
 import ddu.game.world.World;
 import org.newdawn.slick.*;
-import org.newdawn.slick.command.InputProvider;
-import org.newdawn.slick.command.InputProviderListener;
 
 import java.util.ArrayList;
 
@@ -28,6 +28,7 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     private ComponentMapper<DrawComponent>  drawMapper = ComponentMapper.getFor(DrawComponent.class);
     private ComponentMapper<PositionComponent> positionMapper  = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<VelocityComponent> velocityMapper = ComponentMapper.getFor(VelocityComponent.class);
+    private ComponentMapper<AnimationComponent> animationMapper = ComponentMapper.getFor(AnimationComponent.class);
 
     //Families (Collections of components)
     private final static Family physicsFamily = Families.PHYSICS.getFamily();
@@ -47,6 +48,9 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
 
     //Game world
     public World world;
+
+    //Unit builder
+    public UnitBuilder unitBuilder;
 
     //Camera
     public Camera camera;
@@ -74,20 +78,30 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
          */
 
         this.camera=new Camera();
-        InputListener inputListener = new InputListener(this);
-        gameContainer.getInput().addKeyListener(inputListener);
-        gameContainer.getInput().addMouseListener(inputListener);
+        InputSystem inputSystem = new InputSystem(this);
+        gameContainer.getInput().addKeyListener(inputSystem);
+        gameContainer.getInput().addMouseListener(inputSystem);
 
         world = new World();
         world.generateWorld(0);
         world.addWorldToEngine(this);
 
+        unitBuilder = new UnitBuilder(this);
+        unitBuilder.summon(Unit.KNIGHT, 100, 100);
+
         renderSystem = new RenderSystem(this);
     }
 
     @Override
-    public void update(GameContainer gameContainer, int i) throws SlickException {
-        update((float)i/1000f);
+    public void update(GameContainer gameContainer, int dt) throws SlickException {
+
+        //Update animations
+        for(Entity entity : this.getEntitiesFor(Family.all(AnimationComponent.class).get())) {
+            AnimationComponent animations = animationMapper.get(entity);
+            animations.animation.update(dt);
+        }
+
+        update((float)dt/1000f);
     }
 
     @Override

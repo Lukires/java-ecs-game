@@ -1,20 +1,12 @@
 package ddu.game.animation;
 
-import ddu.game.texture.Texture;
+import org.newdawn.slick.Image;
 
-public class Animation {
-    public final Texture[] frames;
-    // These are the start time in seconds for each frame. Has to be ascending.
-    public final Float[] durations;
-    public final boolean loop;
+public class Animation extends org.newdawn.slick.Animation {
 
-    Animation(Texture[] frames, Float[] durations, boolean loop) {
-        this.frames = frames;
-        this.durations = durations;
-        this.loop = loop;
-    }
-
-    float totalDuration() {
-        return durations[durations.length-1];
+    //time is in miliseconds
+    public Animation(Image[] frames, int[] time, boolean looping) {
+        super(frames, time);
+        setLooping(looping);
     }
 }

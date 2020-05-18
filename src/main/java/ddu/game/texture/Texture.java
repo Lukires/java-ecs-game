@@ -29,6 +29,10 @@ public class Texture {
         }
     }
 
+    public Texture(Image image) {
+        this.image=image;
+    }
+
     public Image getImage() {
         return this.image;
     }
