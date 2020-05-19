@@ -1,6 +1,7 @@
 package ddu.game;
 
 import com.badlogic.ashley.core.*;
+import ddu.game.animation.Animation;
 import ddu.game.components.AnimationComponent;
 import ddu.game.components.collision.CollisionComponent;
 import ddu.game.components.DrawComponent;
@@ -46,6 +47,9 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     public float accumulator = 0f;
     public long lastTime;
 
+    //InputSystem
+    InputSystem inputSystem;
+
     //Game world
     public World world;
 
@@ -77,8 +81,11 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         This way of splitting up code is kinda anti pattern and bad but it's fine for now
          */
 
+        gameContainer.setVSync(true);
+        gameContainer.setShowFPS(false);
+
         this.camera=new Camera();
-        InputSystem inputSystem = new InputSystem(this);
+        inputSystem = new InputSystem(this);
         gameContainer.getInput().addKeyListener(inputSystem);
         gameContainer.getInput().addMouseListener(inputSystem);
 
@@ -87,7 +94,13 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         world.addWorldToEngine(this);
 
         unitBuilder = new UnitBuilder(this);
-        unitBuilder.summon(Unit.KNIGHT, 100, 100);
+        unitBuilder.summon(Unit.KNIGHT, 0, 0);
+        unitBuilder.summon(Unit.KNIGHT, 0, 16);
+        unitBuilder.summon(Unit.KNIGHT, 0, 32);
+        unitBuilder.summon(Unit.KNIGHT, 0, 48);
+        unitBuilder.summon(Unit.KNIGHT, 0, 64);
+        unitBuilder.summon(Unit.KNIGHT, 0, 80);
+        unitBuilder.summon(Unit.KNIGHT, 0, 96);
 
         renderSystem = new RenderSystem(this);
     }
@@ -96,9 +109,16 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     public void update(GameContainer gameContainer, int dt) throws SlickException {
 
         //Update animations
+
+        ArrayList<Animation> animationList = new ArrayList<Animation>();
+
         for(Entity entity : this.getEntitiesFor(Family.all(AnimationComponent.class).get())) {
             AnimationComponent animations = animationMapper.get(entity);
-            animations.animation.update(dt);
+            if (!animationList.contains(animations.animation))
+            {
+                animations.animation.update(dt);
+                animationList.add(animations.animation);
+            }
         }
 
         update((float)dt/1000f);
@@ -106,6 +126,29 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
 
     @Override
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
+            /* Arrows and their numbers
+    <- 203
+    ^ 200
+    V 208
+    205
+    ESC 1
+    */
+        if(inputSystem.keysPressed.contains(203)) {
+            camera.setX(camera.getX()-5);
+        }
+        if(inputSystem.keysPressed.contains(205)) {
+            camera.setX(camera.getX()+5);
+        }
+        if(inputSystem.keysPressed.contains(200)) {
+            camera.setY(camera.getY()-5);
+        }
+        if(inputSystem.keysPressed.contains(208)) {
+            camera.setY(camera.getY()+5);
+        }
+        if(inputSystem.keysPressed.contains(1)) {
+            System.exit(0);
+        }
+
         if(visualize) {
             renderSystem.render(gameContainer, graphics);
         }

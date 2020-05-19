@@ -5,30 +5,30 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.MouseListener;
 
+import java.util.ArrayList;
+
 public class InputSystem implements KeyListener, MouseListener {
+
+    public ArrayList<Integer> keysPressed = new ArrayList<Integer>();
 
     GameEngine engine;
     public InputSystem(GameEngine engine) {
         this.engine=engine;
     }
 
-    /* Arrows and their numbers
-    <- 203
-    ^ 200
-    V 208
-    205
-    */
-
     @Override
     public void keyPressed(int key, char c) {
         System.out.println(key);
 
+        keysPressed.add(key);
 
     }
 
     @Override
     public void keyReleased(int i, char c) {
-
+        if (keysPressed.contains(i)) {
+            keysPressed.remove((Integer)i);
+        }
     }
 
     @Override

@@ -43,6 +43,7 @@ public class RenderSystem {
     }
 
     public void render(GameContainer gameContainer, Graphics graphics) {
+        graphics.clear();
         this.entities = engine.getEntitiesFor(Families.DRAW.getFamily());
         List<Entity> sortedEntities = Arrays.asList(this.entities.toArray());
 
@@ -51,7 +52,7 @@ public class RenderSystem {
         graphics.translate(camera.getX(), camera.getY());
         graphics.scale(camera.getScale(), camera.getScale());
 
-        graphics.setWorldClip(camera.getX(), camera.getY(), gameContainer.getWidth(), gameContainer.getHeight());
+        graphics.setWorldClip(-100, -100, gameContainer.getWidth()+100, gameContainer.getHeight()+100);
 
         PositionComponent positionComponent;
         DrawComponent drawComponent;

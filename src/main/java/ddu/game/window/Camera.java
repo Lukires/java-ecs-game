@@ -3,7 +3,7 @@ package ddu.game.window;
 public class Camera {
     private int x = 0;
     private int y = 0;
-    private float scale = 1;
+    private float scale = 5;
 
     public int getX() {
         return x;
