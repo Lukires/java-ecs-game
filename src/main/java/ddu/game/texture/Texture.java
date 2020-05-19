@@ -16,11 +16,9 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 public class Texture {
+    private Image image;
 
-    String path;
-    Image image;
     public Texture(String filepath) {
-        this.path=filepath;
         try {
             this.image=new Image(filepath);
             this.image.setFilter(Image.FILTER_NEAREST);
@@ -36,6 +34,4 @@ public class Texture {
     public Image getImage() {
         return this.image;
     }
-
-
 }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class InputSystem implements KeyListener, MouseListener {
 
-    public ArrayList<Integer> keysPressed = new ArrayList<Integer>();
+    public ArrayList<Integer> keysDown = new ArrayList<Integer>();
 
     GameEngine engine;
     public InputSystem(GameEngine engine) {
@@ -20,14 +20,14 @@ public class InputSystem implements KeyListener, MouseListener {
     public void keyPressed(int key, char c) {
         System.out.println(key);
 
-        keysPressed.add(key);
+        keysDown.add(key);
 
     }
 
     @Override
     public void keyReleased(int i, char c) {
-        if (keysPressed.contains(i)) {
-            keysPressed.remove((Integer)i);
+        if (keysDown.contains(i)) {
+            keysDown.remove((Integer)i);
         }
     }
 
