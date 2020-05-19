@@ -10,6 +10,7 @@ import org.joml.Vector2d;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
 public class PathFindingSystem extends EntitySystem  {
@@ -38,24 +39,26 @@ public class PathFindingSystem extends EntitySystem  {
     public Path findPath(Vector2d from, Vector2d to) {
 
         Node destination = new Node(xStep((int)to.x),yStep((int)to.y),-100000);
-        Node start = new Node(xStep((int)to.x),yStep((int)to.y),0);
+        Node start = new Node(xStep((int)from.x),yStep((int)from.y),1);
         graph = new Graph(engine,destination);
 
-        visited=new float[10000][10000];
-        for(float[] row : visited) {
-            Arrays.fill(row, -1);
-        }
+        visited = new HashMap<Integer, HashMap<Integer, Float>>();
 
         PriorityQueue<Path> paths = new PriorityQueue<Path>(new Path.PathComparator());
         Path startPath = new Path();
         startPath.addNode(start);
         paths.add(startPath);
 
-        return AStarPathFinding(paths, destination);
+        Path path = AStarPathFinding(paths, destination);
+        if(path==null) {
+            return startPath;
+        }
+        return path;
     }
 
 
-    float visited[][];
+    HashMap<Integer, HashMap<Integer, Float>> visited = new HashMap<Integer, HashMap<Integer, Float>>();
+
     public Path AStarPathFinding(PriorityQueue<Path> paths, Node destination) {
         Path path = paths.poll();
 
@@ -74,12 +77,20 @@ public class PathFindingSystem extends EntitySystem  {
             int x = node.getX();
             int y = node.getY();
 
-            if (!(visited[x][y]<0)) {
-                if(cost>=visited[x][y]) {
-                    continue;
+            if(visited.containsKey(x)) {
+                if(visited.containsKey(y)) {
+                    if(visited.get(x).get(y)!=null) {
+                        if (cost>=visited.get(x).get(y)) {
+                            continue;
+                        }
+                    }
                 }
             }
-            visited[x][y] = cost;
+
+            HashMap<Integer, Float> xvisited = visited.containsKey(x)?visited.get(x):new HashMap<Integer, Float>();
+            xvisited.put(y, cost);
+            visited.put(x,xvisited);
+
             Path newPath = new Path(path.getNodes());
             newPath.addNode(node);
             paths.add(newPath);

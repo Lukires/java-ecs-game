@@ -8,14 +8,18 @@ import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.VelocityComponent;
 import ddu.game.components.family.Families;
+import ddu.game.components.pathfinding.Node;
+import ddu.game.components.pathfinding.Path;
 import ddu.game.input.InputSystem;
 import ddu.game.input.Keys;
 import ddu.game.systems.MovementSystem;
+import ddu.game.systems.PathFindingSystem;
 import ddu.game.unit.Unit;
 import ddu.game.unit.UnitBuilder;
 import ddu.game.window.Camera;
 import ddu.game.window.RenderSystem;
 import ddu.game.world.World;
+import org.joml.Vector2d;
 import org.newdawn.slick.*;
 
 import java.util.ArrayList;
@@ -90,15 +94,21 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
 
         //Unit builder
         UnitBuilder unitBuilder = new UnitBuilder(this);
-        unitBuilder.summon(Unit.KNIGHT, 0, 0);
-        unitBuilder.summon(Unit.KNIGHT, 0, 16);
-        unitBuilder.summon(Unit.KNIGHT, 0, 32);
-        unitBuilder.summon(Unit.KNIGHT, 0, 48);
-        unitBuilder.summon(Unit.KNIGHT, 0, 64);
-        unitBuilder.summon(Unit.KNIGHT, 0, 80);
-        unitBuilder.summon(Unit.KNIGHT, 0, 96);
+        unitBuilder.summon(Unit.KNIGHT, 32, 32);
+        unitBuilder.summon(Unit.KNIGHT, 32, 48);
+        unitBuilder.summon(Unit.KNIGHT, 32, 64);
+        unitBuilder.summon(Unit.KNIGHT, 32, 80);
+        unitBuilder.summon(Unit.KNIGHT, 32, 96);
 
         renderSystem = new RenderSystem(this);
+
+        Path path = new PathFindingSystem(this).findPath(new Vector2d(32, 32), new Vector2d(96, 64));
+        for(Node node : path.getNodes()) {
+            System.out.println("Size: "+path.getNodes().size());
+            System.out.println("X: "+ node.getX()*16);
+            System.out.println("Y: "+ node.getY()*16);
+        }
+
     }
 
     @Override
