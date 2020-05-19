@@ -8,8 +8,16 @@ import ddu.game.components.AnimationComponent;
 import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.family.Families;
+import ddu.game.input.InputSystem;
+import org.joml.Vector2d;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.ShapeFill;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Vector2f;
+import org.w3c.dom.css.Rect;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -69,6 +77,16 @@ public class RenderSystem {
                 drawComponent = drawMapper.get(entity);
                 graphics.drawImage(drawComponent.texture.getImage(), (int)positionComponent.position.x, (int)positionComponent.position.y);
             }
+        }
+
+        if (engine.inputSystem.mousePressed) {
+
+            graphics.setLineWidth(4f);
+            Vector2d mouseCoords = InputSystem.mouseToGameCoord(engine, gameContainer.getInput().getMouseX(),gameContainer.getInput().getMouseY());
+            graphics.setColor(new Color(255, 255, 255, 50));
+
+            graphics.fillRect((float)engine.inputSystem.mousePressStartPosition.x, (float) engine.inputSystem.mousePressStartPosition.y, (float) mouseCoords.x - (float) engine.inputSystem.mousePressStartPosition.x, (float) mouseCoords.y - (float) engine.inputSystem.mousePressStartPosition.y);
+
         }
 
     }

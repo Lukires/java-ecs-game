@@ -2,6 +2,7 @@ package ddu.game.components.collision;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
 
 public class CollisionComponent implements Component, Pool.Poolable {
@@ -28,6 +29,13 @@ public class CollisionComponent implements Component, Pool.Poolable {
 
     public Shape getHitbox() {
         return hitbox;
+    }
+
+    public boolean collideCenter(Shape shape) {
+        float xcenter = hitbox.getCenterX();
+        float ycenter = hitbox.getCenterY();
+
+        return shape.contains(xcenter, ycenter);
     }
 
     public void setHitbox(Shape hitbox) {

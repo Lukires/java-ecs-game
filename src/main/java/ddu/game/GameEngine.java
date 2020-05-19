@@ -45,7 +45,7 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     private static final int frameRate = 60;
 
     //InputSystem
-    private InputSystem inputSystem;
+    public InputSystem inputSystem;
 
     //Camera
     public Camera camera;
@@ -55,8 +55,11 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         this.visualize=visualize;
     }
 
+    public GameContainer gameContainer;
+
     @Override
-    public void init(GameContainer gameContainer) throws SlickException {
+    public void init(GameContainer ngameContainer) throws SlickException {
+        gameContainer=ngameContainer;
         gameContainer.setTargetFrameRate(frameRate);
         MovementSystem movementSystem = new MovementSystem(10);
 
@@ -114,6 +117,7 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
             }
         }
 
+        //Entity component system update
         update((float)dt/1000f);
     }
 
@@ -127,16 +131,16 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     ESC 1
     */
         if(inputSystem.keysDown.contains(203)) {
-            camera.setX(camera.getX()-5);
-        }
-        if(inputSystem.keysDown.contains(205)) {
             camera.setX(camera.getX()+5);
         }
+        if(inputSystem.keysDown.contains(205)) {
+            camera.setX(camera.getX()-5);
+        }
         if(inputSystem.keysDown.contains(200)) {
-            camera.setY(camera.getY()-5);
+            camera.setY(camera.getY()+5);
         }
         if(inputSystem.keysDown.contains(208)) {
-            camera.setY(camera.getY()+5);
+            camera.setY(camera.getY()-5);
         }
         if(inputSystem.keysDown.contains(1)) {
             System.exit(0);

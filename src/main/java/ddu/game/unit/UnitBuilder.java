@@ -32,7 +32,7 @@ public class UnitBuilder {
         healthComponent.health = unit.getHealth();
         positionComponent.position = new Vector2d(x, y);
         unitComponent.unit = unit;
-        collisionComponent.setHitbox((Shape) new Rectangle(0, 0, 16,16));
+        collisionComponent.setHitbox((Shape) new Rectangle(x, y, 16,16));
 
 
         engine.addEntity(entity);
