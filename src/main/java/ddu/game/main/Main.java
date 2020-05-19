@@ -43,7 +43,7 @@ public class Main {
 
         try{
             AppGameContainer game = new AppGameContainer(new GameEngine(true));
-            game.setDisplayMode(1920, 1080, true);
+            game.setDisplayMode(860, 640, false);
             game.start();
         } catch (SlickException e) {
             e.printStackTrace();
