@@ -17,9 +17,6 @@ public enum Spritesheets {
     }
 
     public Image getImage(int x, int y) {
-        spriteSheet.startUse();
-        Image image = spriteSheet.getSubImage(x,y);
-        spriteSheet.endUse();
-        return image;
+        return spriteSheet.getSubImage(x,y);
     }
 }

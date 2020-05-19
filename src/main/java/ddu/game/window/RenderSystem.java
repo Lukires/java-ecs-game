@@ -33,17 +33,15 @@ the renderer
  */
 public class RenderSystem {
 
-    private ImmutableArray<Entity> entities;
-
     private ComponentMapper<PositionComponent> positionMapper  = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<DrawComponent> drawMapper = ComponentMapper.getFor(DrawComponent.class);
     private ComponentMapper<AnimationComponent> animationMapper = ComponentMapper.getFor(AnimationComponent.class);
 
     private GameEngine engine;
-    Camera camera;
+    private Camera camera;
 
     //Used for z-sorting
-    Comparator<Entity> zComparator = new ZComparator();
+    private Comparator<Entity> zComparator = new ZComparator();
 
     public RenderSystem(GameEngine engine) {
         this.engine=engine;
@@ -52,8 +50,8 @@ public class RenderSystem {
 
     public void render(GameContainer gameContainer, Graphics graphics) {
         graphics.clear();
-        this.entities = engine.getEntitiesFor(Families.DRAW.getFamily());
-        List<Entity> sortedEntities = Arrays.asList(this.entities.toArray());
+        ImmutableArray<Entity> entities = engine.getEntitiesFor(Families.DRAW.getFamily());
+        List<Entity> sortedEntities = Arrays.asList(entities.toArray());
 
         Collections.sort(sortedEntities, zComparator);
 

@@ -42,19 +42,10 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     public ArrayList<Keys> keys = new ArrayList<Keys>();
 
     // Fixed time step variable
-    public static final int frameRate = 60;
-    public static final float interval = 1f / frameRate;
-    public float accumulator = 0f;
-    public long lastTime;
+    private static final int frameRate = 60;
 
     //InputSystem
     public InputSystem inputSystem;
-
-    //Game world
-    public World world;
-
-    //Unit builder
-    public UnitBuilder unitBuilder;
 
     //Camera
     public Camera camera;
@@ -92,16 +83,20 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         gameContainer.getInput().addKeyListener(inputSystem);
         gameContainer.getInput().addMouseListener(inputSystem);
 
-        world = new World();
+        //Game world
+        World world = new World();
         world.generateWorld(0);
         world.addWorldToEngine(this);
 
-       unitBuilder = new UnitBuilder(this);
-        unitBuilder.summon(Unit.KNIGHT, 48, 32);
-        unitBuilder.summon(Unit.KNIGHT, 48, 48);
-        unitBuilder.summon(Unit.KNIGHT, 48, 64);
-        unitBuilder.summon(Unit.KNIGHT, 48, 80);
-        unitBuilder.summon(Unit.KNIGHT, 48, 96);
+        //Unit builder
+        UnitBuilder unitBuilder = new UnitBuilder(this);
+        unitBuilder.summon(Unit.KNIGHT, 0, 0);
+        unitBuilder.summon(Unit.KNIGHT, 0, 16);
+        unitBuilder.summon(Unit.KNIGHT, 0, 32);
+        unitBuilder.summon(Unit.KNIGHT, 0, 48);
+        unitBuilder.summon(Unit.KNIGHT, 0, 64);
+        unitBuilder.summon(Unit.KNIGHT, 0, 80);
+        unitBuilder.summon(Unit.KNIGHT, 0, 96);
 
         renderSystem = new RenderSystem(this);
     }
@@ -135,19 +130,19 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     205
     ESC 1
     */
-        if(inputSystem.keysPressed.contains(203)) {
+        if(inputSystem.keysDown.contains(203)) {
             camera.setX(camera.getX()+5);
         }
-        if(inputSystem.keysPressed.contains(205)) {
+        if(inputSystem.keysDown.contains(205)) {
             camera.setX(camera.getX()-5);
         }
-        if(inputSystem.keysPressed.contains(200)) {
+        if(inputSystem.keysDown.contains(200)) {
             camera.setY(camera.getY()+5);
         }
-        if(inputSystem.keysPressed.contains(208)) {
+        if(inputSystem.keysDown.contains(208)) {
             camera.setY(camera.getY()-5);
         }
-        if(inputSystem.keysPressed.contains(1)) {
+        if(inputSystem.keysDown.contains(1)) {
             System.exit(0);
         }
 
@@ -170,9 +165,5 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     @Override
     public void run() {
         System.out.print(1);
-
     }
-
-
-
 }

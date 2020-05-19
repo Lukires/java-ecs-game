@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class InputSystem implements KeyListener, MouseListener {
 
-    public ArrayList<Integer> keysPressed = new ArrayList<Integer>();
+    public ArrayList<Integer> keysDown = new ArrayList<Integer>();
 
     //Actually leftmouse pressed but whatever
     public boolean mousePressed = false;
@@ -34,19 +34,18 @@ public class InputSystem implements KeyListener, MouseListener {
 
     GameEngine engine;
     public InputSystem(GameEngine engine) {
-        this.engine=engine;
+        this.engine = engine;
     }
 
     @Override
     public void keyPressed(int key, char c) {
-        keysPressed.add(key);
-
+        keysDown.add(key);
     }
 
     @Override
     public void keyReleased(int i, char c) {
-        if (keysPressed.contains(i)) {
-            keysPressed.remove((Integer)i);
+        if (keysDown.contains(i)) {
+            keysDown.remove((Integer)i);
         }
     }
 

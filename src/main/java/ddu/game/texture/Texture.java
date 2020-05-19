@@ -5,11 +5,11 @@ import org.newdawn.slick.SlickException;
 
 
 public class Texture {
+    private Image image;
 
-    Image image;
     public Texture(String filepath) {
         try {
-            this.image=new Image(filepath);
+            this.image = new Image(filepath);
             this.image.setFilter(Image.FILTER_NEAREST);
         } catch (SlickException e) {
             e.printStackTrace();
@@ -23,6 +23,4 @@ public class Texture {
     public Image getImage() {
         return this.image;
     }
-
-
 }
