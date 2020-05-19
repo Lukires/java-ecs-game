@@ -33,6 +33,7 @@ public class World {
 
                 for(int y = 0; y < room.getHeight(); y++) {
                     Tile tile = tileAxis[y];
+
                     Entity entity = Tile.convertEntity(engine.createEntity(), tile, engine);
                     PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
                     DrawComponent drawComponent = entity.getComponent(DrawComponent.class);

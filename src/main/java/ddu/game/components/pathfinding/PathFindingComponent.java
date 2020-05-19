@@ -1,4 +1,4 @@
-package ddu.game.components;
+package ddu.game.components.pathfinding;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;

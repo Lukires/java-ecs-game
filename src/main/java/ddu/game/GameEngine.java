@@ -96,14 +96,12 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         world.generateWorld(0);
         world.addWorldToEngine(this);
 
-        unitBuilder = new UnitBuilder(this);
-        unitBuilder.summon(Unit.KNIGHT, 0, 0);
-        unitBuilder.summon(Unit.KNIGHT, 0, 16);
-        unitBuilder.summon(Unit.KNIGHT, 0, 32);
-        unitBuilder.summon(Unit.KNIGHT, 0, 48);
-        unitBuilder.summon(Unit.KNIGHT, 0, 64);
-        unitBuilder.summon(Unit.KNIGHT, 0, 80);
-        unitBuilder.summon(Unit.KNIGHT, 0, 96);
+       unitBuilder = new UnitBuilder(this);
+        unitBuilder.summon(Unit.KNIGHT, 48, 32);
+        unitBuilder.summon(Unit.KNIGHT, 48, 48);
+        unitBuilder.summon(Unit.KNIGHT, 48, 64);
+        unitBuilder.summon(Unit.KNIGHT, 48, 80);
+        unitBuilder.summon(Unit.KNIGHT, 48, 96);
 
         renderSystem = new RenderSystem(this);
     }

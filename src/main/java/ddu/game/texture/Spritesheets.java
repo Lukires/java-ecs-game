@@ -1,11 +1,11 @@
 package ddu.game.texture;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 
 public enum Spritesheets {
-    KNIGHT_ANIMATION("./sprites/sheets/knight.png", 20, 20);
+    KNIGHT_ANIMATION("./sprites/sheets/knight.png", 20, 20),
+    DUNGEON_TILES("./sprites/sheets/dungeontiles.png", 16, 16);
 
     SpriteSheet spriteSheet;
     Spritesheets(String path, int spriteWidth, int spriteHeight) {

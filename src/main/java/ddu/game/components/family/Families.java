@@ -3,6 +3,7 @@ package ddu.game.components.family;
 import com.badlogic.ashley.core.Family;
 import ddu.game.components.*;
 import ddu.game.components.collision.CollisionComponent;
+import ddu.game.components.pathfinding.PathFindingComponent;
 
 public enum Families {
     PHYSICS(Family.all(PositionComponent.class).one(VelocityComponent.class, CollisionComponent.class).get()),

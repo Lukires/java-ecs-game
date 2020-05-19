@@ -30,9 +30,11 @@ public class MovementSystem extends EntitySystem {
 
         for(Entity entity : entities) {
             positionComponent = positionMapper.get(entity);
-            velocityComponent = velocityMapper.get(entity);
 
-            positionComponent.position.add(velocityComponent.velocity);
+            if(velocityMapper.has(entity)) {
+                velocityComponent = velocityMapper.get(entity);
+                positionComponent.position.add(velocityComponent.velocity);
+            }
 
             if(collisionMapper.has(entity)) {
                 CollisionComponent collisionComponent = collisionMapper.get(entity);

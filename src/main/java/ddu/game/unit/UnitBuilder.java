@@ -2,9 +2,9 @@ package ddu.game.unit;
 
 import com.badlogic.ashley.core.Entity;
 import ddu.game.GameEngine;
-import ddu.game.animation.Animations;
 import ddu.game.components.*;
 import ddu.game.components.collision.CollisionComponent;
+import ddu.game.components.pathfinding.PathFindingComponent;
 import org.joml.Vector2d;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;

@@ -5,13 +5,16 @@ import com.badlogic.ashley.core.PooledEngine;
 import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.collision.CollisionComponent;
+import ddu.game.texture.Spritesheets;
 import ddu.game.texture.Texture;
 import ddu.game.texture.Textures;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.w3c.dom.css.Rect;
 
 public enum Tile {
-    STONE(Textures.STONE_TILE.getTexture(), 16, 16, false, 1.0);
+    STONE(Textures.STONE_TILE.getTexture(), 16, 16, false, 1.0),
+    WALL(new Texture(Spritesheets.DUNGEON_TILES.getImage(1,2)), 16, 16, true, 1.0);
 
     Texture texture;
     int width;
@@ -58,7 +61,8 @@ public enum Tile {
         entity.add(engine.createComponent(PositionComponent.class));
 
         if (type.collidable) {
-            entity.add(engine.createComponent(CollisionComponent.class));
+            CollisionComponent collisionComponent = (CollisionComponent) entity.addAndReturn(engine.createComponent(CollisionComponent.class));
+            collisionComponent.setHitbox(new Rectangle(0,0, type.getWidth(), type.getHeight()));
         }
 
         return entity;
