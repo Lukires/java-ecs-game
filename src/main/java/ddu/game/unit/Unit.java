@@ -5,7 +5,7 @@ import ddu.game.animation.Animations;
 import ddu.game.components.CombatComponent;
 
 public enum Unit {
-    KNIGHT(CombatComponent.Team.GOOD, 100f, 10f, 32,
+    KNIGHT(CombatComponent.Team.GOOD, 100f, 10f, 12,
             Animations.KNIGHT_STANDING_RIGHT.getAnimation(),
             Animations.KNIGHT_STANDING_LEFT.getAnimation(),
             Animations.KNIGHT_WALKING_RIGHT.getAnimation(),
@@ -13,7 +13,7 @@ public enum Unit {
             Animations.KNIGHT_ATTACK_RIGHT.getAnimation(),
             Animations.KNIGHT_ATTACK_LEFT.getAnimation()
     ),
-    EVIL_KNIGHT(CombatComponent.Team.EVIL, 100f, 2f, 32,
+    EVIL_KNIGHT(CombatComponent.Team.EVIL, 100f, 2f, 16,
             Animations.EVIL_KNIGHT_STANDING_RIGHT.getAnimation(),
             Animations.EVIL_KNIGHT_STANDING_LEFT.getAnimation(),
             Animations.EVIL_KNIGHT_WALKING_RIGHT.getAnimation(),
