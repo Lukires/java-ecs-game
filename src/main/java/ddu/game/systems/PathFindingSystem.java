@@ -3,15 +3,13 @@ package ddu.game.systems;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import ddu.game.GameEngine;
-import ddu.game.components.ActionComponent;
-import ddu.game.components.PositionComponent;
-import ddu.game.components.SelectableComponent;
-import ddu.game.components.VelocityComponent;
+import ddu.game.components.*;
 import ddu.game.components.collision.CollisionComponent;
 import ddu.game.input.InputSystem;
 import ddu.game.pathfinding.Graph;
 import ddu.game.pathfinding.Node;
 import ddu.game.pathfinding.Path;
+import ddu.game.unit.Unit;
 import org.joml.Vector2d;
 
 import javax.swing.*;
@@ -26,7 +24,9 @@ public class PathFindingSystem extends EntitySystem  {
     private final ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class);
     private final ComponentMapper<VelocityComponent> velocityMapper = ComponentMapper.getFor(VelocityComponent.class);
     private final ComponentMapper<ActionComponent> actionMapper = ComponentMapper.getFor(ActionComponent.class);
-    private static final Family family = Family.all(SelectableComponent.class, PositionComponent.class, VelocityComponent.class, ActionComponent.class).get();
+    private final ComponentMapper<AnimationComponent> animationMapper = ComponentMapper.getFor(AnimationComponent.class);
+    private final ComponentMapper<UnitComponent> unitMapper = ComponentMapper.getFor(UnitComponent.class);
+    private static final Family family = Family.all(SelectableComponent.class, PositionComponent.class, VelocityComponent.class, ActionComponent.class, AnimationComponent.class, UnitComponent.class).get();
 
     ImmutableArray<Entity> entities;
 
@@ -79,7 +79,17 @@ public class PathFindingSystem extends EntitySystem  {
                 if (position.distance(target) < CLOSE) {
                     // Action complete, remove it from queue
                     actionComponent.actions.remove(0);
-                    velocityMapper.get(entity).velocity.zero();
+
+                    // Reset animation and velocity
+                    Vector2d velocity = velocityMapper.get(entity).velocity;
+                    Unit unit = unitMapper.get(entity).unit;
+                    AnimationComponent animationComponent = animationMapper.get(entity);
+                    if (velocity.x > 0) {
+                        animationComponent.animation = unit.rightStanding;
+                    } else {
+                        animationComponent.animation = unit.leftStanding;
+                    }
+                    velocity.zero();
                     // Restart while loop (it does check if actions is empty again)
                     continue;
                 }
@@ -90,6 +100,13 @@ public class PathFindingSystem extends EntitySystem  {
                 velocity.normalize(SPEED * dt);
 
                 velocityMapper.get(entity).velocity = velocity;
+                Unit unit = unitMapper.get(entity).unit;
+                AnimationComponent animationComponent = animationMapper.get(entity);
+                if (velocity.x > 0) {
+                    animationComponent.animation = unit.rightWalking;
+                } else {
+                    animationComponent.animation = unit.leftWalking;
+                }
                 break;
             }
         }

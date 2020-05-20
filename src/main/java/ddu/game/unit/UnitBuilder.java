@@ -26,7 +26,7 @@ public class UnitBuilder {
         CollisionComponent collisionComponent = (CollisionComponent) entity.addAndReturn(engine.createComponent(CollisionComponent.class));
         ActionComponent actionComponent = (ActionComponent) entity.addAndReturn(engine.createComponent(ActionComponent.class));
 
-        animationComponent.animation = unit.getAnimation();
+        animationComponent.animation = unit.rightStanding;
         animationComponent.zIndex = 1;
         healthComponent.health = unit.getHealth();
         positionComponent.position = new Vector2d(x, y);
