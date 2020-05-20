@@ -5,11 +5,10 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import ddu.game.GameEngine;
 import ddu.game.components.*;
 import ddu.game.components.collision.CollisionComponent;
-import org.newdawn.slick.geom.Shape;
 
 public class CombatSystem extends EntitySystem {
 
-    private ComponentMapper<CombatComponent> componentMapper  = ComponentMapper.getFor(CombatComponent.class);
+    private ComponentMapper<CombatComponent> combatMapper = ComponentMapper.getFor(CombatComponent.class);
     private ComponentMapper<HealthComponent> healthMapper  = ComponentMapper.getFor(HealthComponent.class);
     private ComponentMapper<CollisionComponent> collisionMapper = ComponentMapper.getFor(CollisionComponent.class);
     private ComponentMapper<UnitComponent> unitMapper = ComponentMapper.getFor(UnitComponent.class);
@@ -36,7 +35,7 @@ public class CombatSystem extends EntitySystem {
 
         for(int x = 0; x < entities.size(); x++) {
             Entity entityFirst = entities.get(x);
-            CombatComponent combatComponent = componentMapper.get(entityFirst);
+            CombatComponent combatComponent = combatMapper.get(entityFirst);
             HealthComponent healthComponent = healthMapper.get(entityFirst);
             CollisionComponent collisionComponent = collisionMapper.get(entityFirst);
             UnitComponent unitComponent = unitMapper.get(entityFirst);
@@ -47,7 +46,7 @@ public class CombatSystem extends EntitySystem {
                     continue;
                 }
 
-                CombatComponent combatComponentSecond = componentMapper.get(entitySecond);
+                CombatComponent combatComponentSecond = combatMapper.get(entitySecond);
                 HealthComponent healthComponentSecond = healthMapper.get(entitySecond);
                 CollisionComponent collisionComponentSecond = collisionMapper.get(entitySecond);
                 UnitComponent unitComponentSecond = unitMapper.get(entitySecond);
