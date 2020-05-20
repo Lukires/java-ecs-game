@@ -49,7 +49,7 @@ public class PathFindingSystem extends EntitySystem  {
         startPath.addNode(start);
         paths.add(startPath);
 
-        Path path = AStarPathFinding(paths, destination);
+        Path path = AStarPathFinding(paths, destination, 1000);
         if(path==null) {
             return startPath;
         }
@@ -59,8 +59,12 @@ public class PathFindingSystem extends EntitySystem  {
 
     HashMap<Integer, HashMap<Integer, Float>> visited = new HashMap<Integer, HashMap<Integer, Float>>();
 
-    public Path AStarPathFinding(PriorityQueue<Path> paths, Node destination) {
+    private Path AStarPathFinding(PriorityQueue<Path> paths, Node destination, int depth) {
         Path path = paths.poll();
+
+        if(depth <= 0) {
+            return null;
+        }
 
         if(path == null) {
             return null;
@@ -96,7 +100,7 @@ public class PathFindingSystem extends EntitySystem  {
             paths.add(newPath);
         }
 
-        return AStarPathFinding(paths, destination);
+        return AStarPathFinding(paths, destination, --depth);
 
     }
 
