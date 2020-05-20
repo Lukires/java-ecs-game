@@ -1,6 +1,4 @@
-package ddu.game.components.pathfinding;
-
-import java.util.ArrayList;
+package ddu.game.pathfinding;
 
 public class Node {
 

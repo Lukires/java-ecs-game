@@ -8,8 +8,6 @@ import ddu.game.components.DrawComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.VelocityComponent;
 import ddu.game.components.family.Families;
-import ddu.game.components.pathfinding.Node;
-import ddu.game.components.pathfinding.Path;
 import ddu.game.input.InputSystem;
 import ddu.game.input.Keys;
 import ddu.game.systems.MovementSystem;
@@ -19,7 +17,6 @@ import ddu.game.unit.UnitBuilder;
 import ddu.game.window.Camera;
 import ddu.game.window.RenderSystem;
 import ddu.game.world.World;
-import org.joml.Vector2d;
 import org.newdawn.slick.*;
 
 import java.util.ArrayList;
@@ -65,9 +62,13 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
     public void init(GameContainer ngameContainer) throws SlickException {
         gameContainer=ngameContainer;
         gameContainer.setTargetFrameRate(frameRate);
-        MovementSystem movementSystem = new MovementSystem(10);
 
+        // Systems
+        MovementSystem movementSystem = new MovementSystem(10);
         this.addSystem(movementSystem);
+
+        PathFindingSystem pathFindingSystem = new PathFindingSystem(this);
+        this.addSystem(pathFindingSystem);
 
         //We use this.createEntity() as to avoid initializing new things.
         //for the sake of pooling
@@ -101,14 +102,6 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         unitBuilder.summon(Unit.KNIGHT, 32, 96);
 
         renderSystem = new RenderSystem(this);
-
-        Path path = new PathFindingSystem(this).findPath(new Vector2d(32, 32), new Vector2d(96, 64));
-        for(Node node : path.getNodes()) {
-            System.out.println("Size: "+path.getNodes().size());
-            System.out.println("X: "+ node.getX()*16);
-            System.out.println("Y: "+ node.getY()*16);
-        }
-
     }
 
     @Override
@@ -129,6 +122,9 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
 
         //Entity component system update
         update((float)dt/1000f);
+
+        // Update input
+        inputSystem.update();
     }
 
     @Override

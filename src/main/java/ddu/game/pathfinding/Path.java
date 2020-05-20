@@ -1,4 +1,4 @@
-package ddu.game.components.pathfinding;
+package ddu.game.pathfinding;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -13,11 +13,6 @@ import org.joml.Vector2d;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.ShapeFill;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Vector2f;
-import org.w3c.dom.css.Rect;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -79,7 +74,7 @@ public class RenderSystem {
             }
         }
 
-        if (engine.inputSystem.mousePressed) {
+        if (engine.inputSystem.leftDown) {
 
             graphics.setLineWidth(4f);
             Vector2d mouseCoords = InputSystem.mouseToGameCoord(engine, gameContainer.getInput().getMouseX(),gameContainer.getInput().getMouseY());

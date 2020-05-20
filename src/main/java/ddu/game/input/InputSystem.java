@@ -4,10 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Select;
 import ddu.game.GameEngine;
-import ddu.game.components.AnimationComponent;
 import ddu.game.components.SelectableComponent;
 import ddu.game.components.VelocityComponent;
 import ddu.game.components.collision.CollisionComponent;
@@ -24,17 +21,37 @@ public class InputSystem implements KeyListener, MouseListener {
 
     public ArrayList<Integer> keysDown = new ArrayList<Integer>();
 
-    //Actually leftmouse pressed but whatever
-    public boolean mousePressed = false;
+    // State about our mouse in the current frame
+    // Down specifies whether the button is down or up
+    public boolean leftDown = false;
+    public boolean rightDown = false;
+
+    // Pressed specifies whether it was pressed down this frame/tick
+    public boolean leftPressed = false;
+    public boolean rightPressed = false;
+
+    // Released specifies whether the button was released this frame/tick
+    public boolean leftReleased = false;
+    public boolean rightReleased = false;
+
+    public Vector2d mousePos = new Vector2d(0,0);
 
     public Vector2d mousePressStartPosition = new Vector2d(0,0);
-    private ComponentMapper<SelectableComponent> selectableMapper = ComponentMapper.getFor(SelectableComponent.class);
-    private ComponentMapper<CollisionComponent> componentMapper = ComponentMapper.getFor(CollisionComponent.class);
-    private ComponentMapper<VelocityComponent> velocityMapper = ComponentMapper.getFor(VelocityComponent.class);
+    private final ComponentMapper<SelectableComponent> selectableMapper = ComponentMapper.getFor(SelectableComponent.class);
+    private final ComponentMapper<CollisionComponent> componentMapper = ComponentMapper.getFor(CollisionComponent.class);
 
     GameEngine engine;
     public InputSystem(GameEngine engine) {
         this.engine = engine;
+    }
+
+    // Calling this indicates a tick has passed
+    public void update() {
+        leftPressed = false;
+        rightPressed = false;
+
+        leftReleased = false;
+        rightReleased = false;
     }
 
     @Override
@@ -52,37 +69,34 @@ public class InputSystem implements KeyListener, MouseListener {
     @Override
     public void mouseWheelMoved(int i) {
         engine.camera.setScale(engine.camera.getScale()+((float)i/(float)1000));
-
     }
 
     @Override
     public void mouseClicked(int i, int i1, int i2, int i3) {
-        ImmutableArray<Entity> entities = engine.getEntitiesFor(Family.all(SelectableComponent.class, CollisionComponent.class, VelocityComponent.class).get());
-        for(Entity entity : entities) {
-            if (selectableMapper.get(entity).selected) {
-                velocityMapper.get(entity).velocity.add(1,0);
-            }
-        }
 
     }
 
     @Override
     public void mousePressed(int button, int x, int y) {
-        if(button==0) {
-            mousePressed=true;
+        if(button == 0) {
+            leftDown = true;
             mousePressStartPosition = mouseToGameCoord(engine, x,y);
         }
 
-
-
+        if (button == 0) {
+            leftDown = true;
+            leftPressed = true;
+        } else if (button == 1) {
+            rightDown = true;
+            rightPressed = true;
+        }
     }
 
     @Override
     public void mouseReleased(int button, int x, int y) {
-
         if(button==0) {
-            if(mousePressed) {
-                mousePressed=false;
+            if(leftDown) {
+                leftDown =false;
                 Vector2d mousePressEndPosition = mouseToGameCoord(engine, x,y);
                 ImmutableArray<Entity> entities = engine.getEntitiesFor(Family.all(SelectableComponent.class, CollisionComponent.class).get());
 
@@ -116,11 +130,19 @@ public class InputSystem implements KeyListener, MouseListener {
             }
         }
 
+        // Update state
+        if(button == 0) {
+            leftDown = false;
+            leftReleased = true;
+        } else if (button == 1) {
+            rightDown = false;
+            rightReleased = true;
+        }
     }
 
     @Override
-    public void mouseMoved(int i, int i1, int i2, int i3) {
-
+    public void mouseMoved(int oldX, int oldY, int x, int y) {
+        mousePos.set(x, y);
     }
 
     @Override

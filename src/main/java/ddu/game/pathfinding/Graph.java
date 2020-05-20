@@ -1,4 +1,4 @@
-package ddu.game.components.pathfinding;
+package ddu.game.pathfinding;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
