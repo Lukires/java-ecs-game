@@ -81,6 +81,7 @@ public class PathFindingSystem extends EntitySystem  {
                 if (position.distance(target) < CLOSE) {
                     // Action complete, remove it from queue
                     actionComponent.actions.remove(0);
+                    positionMapper.get(entity).position = target;
 
                     // Reset animation and velocity
                     Vector2d velocity = velocityMapper.get(entity).velocity;
@@ -98,7 +99,6 @@ public class PathFindingSystem extends EntitySystem  {
 
                 Vector2d velocity = new Vector2d(target.x, target.y);
                 velocity.sub(position);
-                System.out.println(velocity.x  + " " + velocity.y);
                 velocity.normalize(SPEED * dt);
 
                 velocityMapper.get(entity).velocity = velocity;
@@ -116,8 +116,10 @@ public class PathFindingSystem extends EntitySystem  {
 
     public Path findPath(Vector2d from, Vector2d to) {
 
-        Node destination = new Node(xStep((int)to.x),yStep((int)to.y),-100000);
-        Node start = new Node(xStep((int)from.x),yStep((int)from.y),0);
+        Node destination = new Node(xStep(to.x),yStep(to.y),-100000);
+        Node start = new Node(xStep(from.x),yStep(from.y),0);
+
+        System.out.println(start.getX() +" "+ start.getY());
         graph = new Graph(engine,destination);
 
         visited = new HashMap<Integer, HashMap<Integer, Float>>();
@@ -187,13 +189,11 @@ public class PathFindingSystem extends EntitySystem  {
         return AStarPathFinding(paths, destination, --depth);
     }
 
-    private int xStep(int x) {
-        return x/16;
+    private int xStep(double x) {
+        return (int)Math.round(x)/16;
     }
 
-    private int yStep(int y) {
-        return y/16;
+    private int yStep(double y) {
+        return (int)Math.round(y)/16;
     }
-
-
 }
