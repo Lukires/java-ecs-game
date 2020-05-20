@@ -27,6 +27,8 @@ public class PathFindingSystem extends EntitySystem  {
     private final ComponentMapper<AnimationComponent> animationMapper = ComponentMapper.getFor(AnimationComponent.class);
     private final ComponentMapper<UnitComponent> unitMapper = ComponentMapper.getFor(UnitComponent.class);
     private static final Family family = Family.all(SelectableComponent.class, PositionComponent.class, VelocityComponent.class, ActionComponent.class, AnimationComponent.class, UnitComponent.class).get();
+    private ComponentMapper<CollisionComponent> collisionMapper = ComponentMapper.getFor(CollisionComponent.class);
+
 
     ImmutableArray<Entity> entities;
 
@@ -113,8 +115,9 @@ public class PathFindingSystem extends EntitySystem  {
     }
 
     public Path findPath(Vector2d from, Vector2d to) {
+
         Node destination = new Node(xStep((int)to.x),yStep((int)to.y),-100000);
-        Node start = new Node(xStep((int)from.x),yStep((int)from.y),1);
+        Node start = new Node(xStep((int)from.x),yStep((int)from.y),0);
         graph = new Graph(engine,destination);
 
         visited = new HashMap<Integer, HashMap<Integer, Float>>();
@@ -123,6 +126,12 @@ public class PathFindingSystem extends EntitySystem  {
         Path startPath = new Path();
         startPath.addNode(start);
         paths.add(startPath);
+
+        for(Entity entity : engine.getEntitiesFor(Family.all(CollisionComponent.class).get())) {
+            if (collisionMapper.get(entity).getHitbox().contains((float)to.x, (float)to.y)) {
+                return startPath;
+            }
+        }
 
         Path path = AStarPathFinding(paths, destination, 1000);
         if(path==null) {
