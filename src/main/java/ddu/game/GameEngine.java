@@ -10,6 +10,7 @@ import ddu.game.components.VelocityComponent;
 import ddu.game.components.family.Families;
 import ddu.game.input.InputSystem;
 import ddu.game.input.Keys;
+import ddu.game.systems.CombatSystem;
 import ddu.game.systems.MovementSystem;
 import ddu.game.systems.PathFindingSystem;
 import ddu.game.unit.Unit;
@@ -70,6 +71,9 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         PathFindingSystem pathFindingSystem = new PathFindingSystem(this);
         this.addSystem(pathFindingSystem);
 
+        CombatSystem combatSystem = new CombatSystem(this);
+        this.addSystem(combatSystem);
+
         //We use this.createEntity() as to avoid initializing new things.
         //for the sake of pooling
         //this.addEntity(Soldier.convertEntity(this.createEntity(), this));
@@ -101,7 +105,10 @@ public class GameEngine extends PooledEngine implements Runnable, Game {
         unitBuilder.summon(Unit.KNIGHT, 32, 80);
         unitBuilder.summon(Unit.KNIGHT, 32, 96);
 
+        unitBuilder.summon(Unit.EVIL_KNIGHT, 96, 96);
+
         renderSystem = new RenderSystem(this);
+
     }
 
     @Override

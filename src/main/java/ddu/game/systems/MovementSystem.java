@@ -2,6 +2,7 @@ package ddu.game.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import ddu.game.components.CombatComponent;
 import ddu.game.components.PositionComponent;
 import ddu.game.components.VelocityComponent;
 import ddu.game.components.collision.CollisionComponent;
@@ -13,6 +14,7 @@ public class MovementSystem extends EntitySystem {
     private ComponentMapper<PositionComponent> positionMapper  = ComponentMapper.getFor(PositionComponent.class);
     private ComponentMapper<VelocityComponent> velocityMapper = ComponentMapper.getFor(VelocityComponent.class);
     private ComponentMapper<CollisionComponent> collisionMapper = ComponentMapper.getFor(CollisionComponent.class);
+    private ComponentMapper<CombatComponent> combatMapper = ComponentMapper.getFor(CombatComponent.class);
     private static final Family physicsFamily = Families.PHYSICS.getFamily();
 
     public MovementSystem(int priority) {
@@ -40,6 +42,11 @@ public class MovementSystem extends EntitySystem {
                 CollisionComponent collisionComponent = collisionMapper.get(entity);
                 collisionComponent.getHitbox().setX((float)positionComponent.position.x);
                 collisionComponent.getHitbox().setY((float)positionComponent.position.y);
+            }
+            if(combatMapper.has(entity)) {
+                CombatComponent combatComponent = combatMapper.get(entity);
+                combatComponent.range.setX((float)positionComponent.position.x);
+                combatComponent.range.setY((float)positionComponent.position.y);
             }
 
         }
