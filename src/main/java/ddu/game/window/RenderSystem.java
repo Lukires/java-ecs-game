@@ -67,7 +67,11 @@ public class RenderSystem {
             if (animationMapper.has(entity)) {
                 animationComponent = animationMapper.get(entity);
 
-                graphics.drawImage(animationComponent.animation.getCurrentFrame(), (int)positionComponent.position.x, (int)positionComponent.position.y);
+                graphics.drawImage(
+                    animationComponent.animation.getCurrentFrame(),
+                    (int)positionComponent.position.x+animationComponent.dx,
+                    (int)positionComponent.position.y+animationComponent.dy
+                );
             }else{
                 drawComponent = drawMapper.get(entity);
                 graphics.drawImage(drawComponent.texture.getImage(), (int)positionComponent.position.x, (int)positionComponent.position.y);

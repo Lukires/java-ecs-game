@@ -28,6 +28,9 @@ public class UnitBuilder {
 
         animationComponent.animation = unit.rightStanding;
         animationComponent.zIndex = 1;
+        animationComponent.dx = -10;
+        animationComponent.dy = -7;
+
         healthComponent.health = unit.getHealth();
         positionComponent.position = new Vector2d(x, y);
         unitComponent.unit = unit;

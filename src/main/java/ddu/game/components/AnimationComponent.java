@@ -9,6 +9,8 @@ public class AnimationComponent implements Component, Pool.Poolable {
     public int selected = 0;
     public Animation animation;
     public short zIndex = 0;
+    public int dx = 0;
+    public int dy = 0;
 
     public void reset() {
         zIndex = 0;

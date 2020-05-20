@@ -44,7 +44,6 @@ public enum Animations {
     }
 
     public Animation getAnimation() {
-        //return animation;
-        return new Animation(new Image[] {Spritesheets.DUNGEON_TILES.getImage(5,6)}, new int[]{200},true);
+        return animation;
     }
 }
